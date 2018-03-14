@@ -21,11 +21,13 @@ class SimplePermissions {
         "requestPermission", {"permission": getPermissionString(permission)});
   }
 
+  /// Open app settings on Android and iOs
   static Future<bool> openSettings() {
     return _channel.invokeMethod("openSettings");
   }
 }
 
+/// Enum of all available [Permission]
 enum Permission {
   RecordAudio,
   Camera,

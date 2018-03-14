@@ -2,7 +2,10 @@ package com.ethras.simplepermissions;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -20,6 +23,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class SimplePermissionsPlugin implements MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
     private Registrar registrar;
     private Result result;
+
     /**
      * Plugin registration.
      */
@@ -51,10 +55,23 @@ public class SimplePermissionsPlugin implements MethodCallHandler, PluginRegistr
                 this.result = result;
                 requestPermission(permission);
                 break;
+            case "openSettings":
+                openSettings();
+                result.success(true);
+                break;
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    private void openSettings() {
+        Activity activity = registrar.activity();
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + activity.getPackageName()));
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
     }
 
     private String getManifestPermission(String permission) {
@@ -74,6 +91,12 @@ public class SimplePermissionsPlugin implements MethodCallHandler, PluginRegistr
                 break;
             case "ACCESS_COARSE_LOCATION":
                 res = Manifest.permission.ACCESS_COARSE_LOCATION;
+                break;
+            case "WHEN_IN_USE_LOCATION":
+                res = Manifest.permission.ACCESS_FINE_LOCATION;
+                break;
+            case "ALWAYS_LOCATION":
+                res = Manifest.permission.ACCESS_FINE_LOCATION;
                 break;
             default:
                 res = "ERROR";
@@ -105,6 +128,6 @@ public class SimplePermissionsPlugin implements MethodCallHandler, PluginRegistr
             Log.i("SimplePermission", "Requesting permission result : " + res);
             result.success(res);
         }
-        return  res;
+        return res;
     }
 }
