@@ -51,9 +51,3 @@ enum Permission {
   /// Open app settings on Android and iOs
   static Future<bool> openSettings();
 ```
-
-## Usage
-
-
-
-Check permission
