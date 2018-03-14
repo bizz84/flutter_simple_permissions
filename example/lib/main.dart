@@ -51,7 +51,8 @@ class _MyAppState extends State<MyApp> {
             new Text('Running on: $_platformVersion\n'),
             new DropdownButton(items: _getDropDownItems(), value: permission, onChanged: onDropDownChanged),
             new RaisedButton(onPressed: checkPermission, child: new Text("Check permission")),
-            new RaisedButton(onPressed: requestPermission, child: new Text("Requestr permission"))
+            new RaisedButton(onPressed: requestPermission, child: new Text("Request permission")),
+            new RaisedButton(onPressed: SimplePermissions.openSettings, child: new Text("Open settings"))
           ]),
         ),
       ),
