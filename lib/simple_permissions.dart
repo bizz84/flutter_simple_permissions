@@ -34,7 +34,7 @@ class SimplePermissions {
   }
 
   static Future<CameraAuthorizationStatus> checkCameraPermission() async {
-    String authStatus = _channel.invokeMethod("checkCameraPermission");
+    var authStatus = _channel.invokeMethod("checkCameraPermission");
     authStatus.then((authStatus) {
       switch (authStatus) {
         case "notDetermined": return CameraAuthorizationStatus.notDetermined;
