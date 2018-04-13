@@ -9,6 +9,15 @@ enum CameraAuthorizationStatus {
   authorized
 }
 
+CameraAuthorizationStatus authorizationStatus(String status) {
+  switch (status) {
+    case "notDetermined": return CameraAuthorizationStatus.notDetermined;
+    case "restricted": return CameraAuthorizationStatus.restricted;
+    case "denied": return CameraAuthorizationStatus.denied;
+    case "authorized": return CameraAuthorizationStatus.authorized;
+  }
+}
+
 class SimplePermissions {
   static const MethodChannel _channel =
       const MethodChannel('simple_permissions');
@@ -34,18 +43,9 @@ class SimplePermissions {
   }
 
   static Future<CameraAuthorizationStatus> checkCameraPermission() async {
-    var authStatus = _channel.invokeMethod("checkCameraPermission");
-    authStatus.then((authStatus) {
-      switch (authStatus) {
-        case "notDetermined": return CameraAuthorizationStatus.notDetermined;
-        case "restricted": return CameraAuthorizationStatus.restricted;
-        case "denied": return CameraAuthorizationStatus.denied;
-        case "authorized": return CameraAuthorizationStatus.authorized;
-      }
-    });
-    return authStatus;
+    String authStatus = await _channel.invokeMethod("checkCameraPermission");
+    return Future.value(authorizationStatus(authStatus));
   }
-
 }
 
 /// Enum of all available [Permission]
