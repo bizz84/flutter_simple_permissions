@@ -32,15 +32,18 @@ class SimplePermissions {
   static Future<bool> openSettings() {
     return _channel.invokeMethod("openSettings");
   }
-  
-  static CameraAuthorizationStatus checkCameraPermission() async {
-    String authStatus = await _channel.invokeMethod("checkCameraPermission");
-    switch (authStatus) {
-      case "notDetermined": return CameraAuthorizationStatus.notDetermined;
-      case "restricted": return CameraAuthorizationStatus.restricted;
-      case "denied": return CameraAuthorizationStatus.denied;
-      case "authorized": return CameraAuthorizationStatus.authorized;
-    }
+
+  static Future<CameraAuthorizationStatus> checkCameraPermission() async {
+    String authStatus = _channel.invokeMethod("checkCameraPermission");
+    authStatus.then((authStatus) {
+      switch (authStatus) {
+        case "notDetermined": return CameraAuthorizationStatus.notDetermined;
+        case "restricted": return CameraAuthorizationStatus.restricted;
+        case "denied": return CameraAuthorizationStatus.denied;
+        case "authorized": return CameraAuthorizationStatus.authorized;
+      }
+    });
+    return authStatus;
   }
 
 }
