@@ -3,6 +3,18 @@ import UIKit
 import AVFoundation
 import CoreLocation
 
+extension AVAuthorizationStatus : CustomStringConvertible {
+  
+  public var description: String {
+    switch self {
+    case .notDetermined: return "notDetermined"
+    case .restricted: return "restricted"
+    case .denied: return "denied"
+    case .authorized: return "authorized"
+    }
+  }
+}
+
 public class SwiftSimplePermissionsPlugin: NSObject, FlutterPlugin, CLLocationManagerDelegate {
     var whenInUse = false;
     var result: FlutterResult? = nil;
@@ -19,6 +31,9 @@ public class SwiftSimplePermissionsPlugin: NSObject, FlutterPlugin, CLLocationMa
         let method = call.method;
         let dic = call.arguments as? [String: Any];
         switch(method) {
+        case "checkCameraPermission":
+            let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+            result(authStatus.description)
         case "checkPermission":
             let permission = dic!["permission"] as! String;
             checkPermission(permission, result: result);
